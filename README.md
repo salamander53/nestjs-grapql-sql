@@ -24,6 +24,8 @@
 
 ## Description
 
+Đây là dự án sử dụng nestjs để tạo backend, GraphQL làm cầu nối và database là SQL server
+
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
@@ -71,4 +73,4 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
-"# nestjs-grapql-sql-1st" 
+"# nestjs-grapql-sql-1st"
