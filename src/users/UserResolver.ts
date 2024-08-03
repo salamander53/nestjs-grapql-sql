@@ -7,25 +7,29 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { User } from '../models/User';
+import { User } from 'src/Graphql/models/User';
 import { mockUsers } from 'src/_mocks/mockUser';
-import { UserSetting } from '../models/UserSetting';
+import { UserSetting } from 'src/Graphql/models/UserSetting';
 import { mockSettingUser } from 'src/_mocks/mockSettingUser';
 import { getNullableType } from 'graphql';
-import { CreateUserInput } from '../utils/CreateUserInput';
+import { CreateUserInput } from 'src/Graphql/utils/CreateUserInput';
+import { Inject } from '@nestjs/common';
+import { UserService } from './UserService';
 
 export let increId = 3;
 
 @Resolver((of) => User)
 export class UserResolver {
+  constructor(@Inject(UserService) private userService: UserService) {}
+
   @Query((returns) => User, { nullable: true })
   getUserById(@Args('id', { type: () => Int }) id: number) {
-    return mockUsers.find((user) => user.id === id);
+    return this.userService.getUserById(id);
   }
 
   @Query(() => [User])
   getUsers() {
-    return mockUsers;
+    return this.userService.getUsers();
   }
 
   @ResolveField((returns) => UserSetting, { name: 'settings', nullable: true })
@@ -36,13 +40,6 @@ export class UserResolver {
 
   @Mutation((returns) => User)
   createUser(@Args('createUserData') createUserData: CreateUserInput) {
-    const { username, displayname } = createUserData;
-    const newUser = {
-      username,
-      displayname,
-      id: ++increId,
-    };
-    mockUsers.push(newUser);
-    return newUser;
+    return this.userService.createUser(createUserData);
   }
 }
